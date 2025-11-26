@@ -50,7 +50,7 @@
  - LoRA adapter dirs saved for all Q&A model variations.
 
 # 📂 Repository Structure
-'''
+```
 .
 ├── streamlit_app.py             # Main UI
 ├── rag_lora_contracts1.py       # LoRA training and inference pipeline
@@ -67,7 +67,7 @@
 ├── faiss_index/                 # Stored FAISS index (optional)
 ├── requirements.txt
 └── README.md
-'''
+```
 
 # 📦 Installation
 1. Clone the repository
