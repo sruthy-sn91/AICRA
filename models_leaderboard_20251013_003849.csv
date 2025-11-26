@@ -1,0 +1,6 @@
+model,epochs,learning_rate,max_length,batch,grad_accum,val_macro_f1,val_accuracy,test_macro_f1,test_accuracy,out_dir
+nlpaueb/legal-bert-base-uncased,3,2e-05,160,1,8,0.7930903457127275,0.9152542372881356,0.8105010787180441,0.9194915254237288,/Users/sruthynath/Mac Docs/MPSTME/LTIM/LTIM_AICRA/Clause_classifier/outputs_models/20251012_233904_legal-bert-base-uncased_lr2e-05_ep3
+roberta-base,3,2e-05,160,1,8,0.7761704604141579,0.9173728813559322,0.7488031215417006,0.9067796610169492,/Users/sruthynath/Mac Docs/MPSTME/LTIM/LTIM_AICRA/Clause_classifier/outputs_models/20251013_000145_roberta-base_lr2e-05_ep3
+microsoft/deberta-v3-base,3,2e-05,160,1,8,0.6641688539349108,0.8877118644067796,0.7136135490124041,0.902542372881356,/Users/sruthynath/Mac Docs/MPSTME/LTIM/LTIM_AICRA/Clause_classifier/outputs_models/20251013_001954_deberta-v3-base_lr2e-05_ep3
+bert-base-uncased,3,2e-05,160,1,8,0.6761298371111126,0.875,0.6851963350676569,0.885593220338983,/Users/sruthynath/Mac Docs/MPSTME/LTIM/LTIM_AICRA/Clause_classifier/outputs_models/20251012_235036_bert-base-uncased_lr2e-05_ep3
+distilbert-base-uncased,3,2e-05,160,1,8,0.6518496067991267,0.8665254237288136,0.6722315404206077,0.8792372881355932,/Users/sruthynath/Mac Docs/MPSTME/LTIM/LTIM_AICRA/Clause_classifier/outputs_models/20251013_001327_distilbert-base-uncased_lr2e-05_ep3

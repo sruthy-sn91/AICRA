@@ -1,0 +1,22 @@
+transformers>=4.42.0
+peft>=0.11.1
+datasets>=2.20.0
+accelerate>=0.33.0
+sentence-transformers>=3.0.1
+faiss-cpu>=1.8.0
+gradio>=4.43.0
+tqdm>=4.66.4
+pydantic>=2.7.0
+
+streamlit
+pymupdf
+python-docx
+pypdf2
+transformers>=4.42.0
+peft>=0.11.1
+sentence-transformers>=3.0.1
+faiss-cpu>=1.8.0
+torch            # pick the build for your platform
+requests
+numpy
+pandas
