@@ -1,8 +1,14 @@
 # AICRA
 # AI-Powered Contracts Analyzer (AICRA)
-AICRA is an end-to-end, clause-centric system for contract parsing, clause classification, retrieval-augmented question answering (RAG), policy compliance checks, and version comparison.
-The pipeline ingests PDF/DOCX/TXT documents, segments them into clauses, labels each clause using a transformer-based classifier, retrieves relevant evidence with FAISS, and generates concise, citation-grounded answers using a LoRA-adapted instruction LLM.
-This repository contains the full codebase, trained artifacts, metrics outputs, and Streamlit UI needed to reproduce the system.
+- AICRA is an end-to-end, clause-centric system for contract parsing, clause classification, retrieval-augmented question answering (RAG), policy compliance checks, and version comparison.
+- The pipeline ingests PDF/DOCX/TXT documents, segments them into clauses, labels each clause using a transformer-based classifier, retrieves relevant evidence with FAISS, and generates concise, citation-grounded answers using a LoRA-adapted instruction LLM.
+- This repository contains the full codebase, trained artifacts, metrics outputs, and Streamlit UI needed to reproduce the system.
+
+<img width="576" height="406" alt="image" src="https://github.com/user-attachments/assets/8a869be5-7aa1-44a7-8d6b-22fe92555127" />
+
+<img width="692" height="422" alt="image" src="https://github.com/user-attachments/assets/af3755e9-1315-4209-85ba-2cde4c3fca64" />
+
+
 
 # ✨ Key Features
 
@@ -20,6 +26,8 @@ This repository contains the full codebase, trained artifacts, metrics outputs, 
 
 **✔️ Policy Studio**
 
+<img width="915" height="146" alt="image" src="https://github.com/user-attachments/assets/56f5c153-a4de-4626-965a-1ed7b62779e2" />
+
  - Deterministic rules engine supporting:
 	 - requires: categories that must exist
 	 - forbids: categories that must not exist
@@ -28,17 +36,18 @@ This repository contains the full codebase, trained artifacts, metrics outputs, 
 
 **✔️ Compare Versions**
 
- - Align clauses across two contract versions using embedding
-   similarity.
-   Reports Added / Removed / Modified clauses.
-   Generates an LLM-based change summary.
+<img width="535" height="387" alt="image" src="https://github.com/user-attachments/assets/7809bea8-2067-4265-8de8-3a352a49d02f" />
+
+
+ - Align clauses across two contract versions using embedding similarity.
+ - Reports Added / Removed / Modified clauses.
+ - Generates an LLM-based change summary.
  
 **✔️ Reproducible Experiments**
 
- - All metrics stored in metrics_train.json, metrics_val.json,
-   metrics_test.json.
-   Includes classification reports and confusion matrices.
-   LoRA adapter dirs saved for all Q&A model variations.
+ - All metrics stored in metrics_train.json, metrics_val.json, metrics_test.json.
+ - Includes classification reports and confusion matrices.
+ - LoRA adapter dirs saved for all Q&A model variations.
 
 # 📂 Repository Structure
 .
@@ -72,39 +81,44 @@ Note for Apple Silicon users
 PyTorch MPS is automatically used; bitsandbytes will run in CPU mode.
 
 🚀 Running the Application
-Start the Streamlit UI
-*streamlit run streamlit_app.py*
+- Start the Streamlit UI
+  *streamlit run streamlit_app.py*
 
 This launches the interactive system with three major tabs:
 
 **Contract Analysis**
-Upload → Parse → Segment → Classify
-View clause table, labels, confidence
-Chat over Contract (RAG)
-Ask a question
-System retrieves Top-K clauses
-Generates cited answer
+ - Upload → Parse → Segment → Classify 
+	 - View clause table, labels, confidence 
+ - Chat over Contract (RAG) 
+	 - Ask a question 
+	 - System retrieves Top-K clauses 
+	 - Generates cited answer
 
 **Policy Studio**
-Build or upload JSON rules
-Evaluate compliance (PASS/FAIL)
+- Build or upload JSON rules
+- Evaluate compliance (PASS/FAIL)
 
 **Compare Versions**
-Upload OLD and NEW versions
-See Added / Removed / Modified
-Generate LLM Change Report
+- Upload OLD and NEW versions
+- See Added / Removed / Modified
+- Generate LLM Change Report
 
 🧠 Training the Clause Classifier
-Run the notebook:
-jupyter notebook clause_classifier.ipynb
+- Run the notebook:
+  jupyter notebook clause_classifier.ipynb
 
 **Outputs:**
 
-Model checkpoint directory
-metrics_train/val/test.json
+- Model checkpoint directory
+  metrics_train/val/test.json
 
-Confusion matrix plots
-models_leaderboard_*.csv
+- Confusion matrix plots
+  models_leaderboard_*.csv
+
+<img width="434" height="397" alt="image" src="https://github.com/user-attachments/assets/7019875f-992b-4b8c-856f-e5346a38bfa5" />
+
+<img width="512" height="411" alt="image" src="https://github.com/user-attachments/assets/77458065-d97f-4df0-9ad6-484d5280d522" />
+
 
 # 🔧 Training the LoRA Adapter
 Use the training script:
@@ -115,50 +129,51 @@ Use the training script:
     --epochs 1*
 
 Outputs include:
-LoRA adapter directory
-Training logs (loss, grad norm, LR schedule)
+
+ - LoRA adapter directory 
+ - Training logs (loss, grad norm, LR schedule)
 
 # 📊 Results Summary
 
-The classifier shows strong diagonal performance with errors concentrated among adjacent clause families (IP Ownership ↔ Assignment, etc.).
-
-FAISS retrieval is fast (tens of ms) and stable at K=5.
-LoRA-adapted LLM produces consistent citations and avoids hallucination when a concept is absent.
-End-to-end latency: ~1–3 seconds for a grounded answer on Apple MPS.
-Policy Studio and Compare Versions provide deterministic, auditable outputs.
-For full details, see the project report’s Results & Analysis chapter.
+ - The classifier shows strong diagonal performance with errors concentrated among adjacent clause families (IP Ownership ↔ Assignment, etc.).
+ - FAISS retrieval is fast (tens of ms) and stable at K=5.
+ - LoRA-adapted LLM produces consistent citations and avoids hallucination when a concept is absent.
+ - End-to-end latency: ~1–3 seconds for a grounded answer on Apple MPS.
+ - Policy Studio and Compare Versions provide deterministic, auditable outputs.
 
 # 🔍 Datasets
 
 **CUAD (Contract Understanding Atticus Dataset)**
 Used for:
-Clause classification
-QA subset preparation
-Examples for segmentation
+ - Clause classification 
+ - QA subset preparation 
+ - Examples for segmentation
 
 **CUAD Q&A Subset (curated)**
 Used for:
-Training LoRA adapters
-Grounded Q&A
+ - Training LoRA adapters 
+ - Grounded Q&A
 Note: Only clauses present in the document are used to answer questions; external knowledge is not injected.
 
 # 🔁 Reproducibility
 This project saves all metrics and model artifacts required to reproduce results:
 metrics_*.json → precision, recall, F1, support
-Confusion matrices
-Leaderboard CSVs
-LoRA adapter directories
-FAISS index (optional)
-Requirements file with pinned versions
+ - metrics_*.json → precision, recall, F1, support 
+ - Confusion matrices
+ - Leaderboard CSVs 
+ - LoRA adapter directories 
+ - FAISS index 
+ - Requirements file with pinned versions
 
 # 🛠️ Tools & Technologies
 
-Python 3.13
-PyTorch (MPS acceleration)
-Sentence-Transformers
-FAISS (IndexFlatIP)
-Hugging Face Transformers
-PEFT (LoRA)
-Streamlit
-pandas / numpy
-PyMuPDF / python-docx
+ - Python 3.13 
+ - PyTorch (MPS acceleration) 
+ - Sentence-Transformers 
+ - FAISS(IndexFlatIP) 
+ - Hugging Face Transformers 
+ - PEFT (LoRA) 
+ - Streamlit 
+ - pandas/ numpy 
+ - PyMuPDF / python-docx
+
