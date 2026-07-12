@@ -45,6 +45,48 @@ jobs:
     runs-on: ubuntu-latest
     needs: build
     steps:
+      - name: Cancel stale in-progress Pages deployment
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const { owner, repo } = context.repo;
+            const activeStatuses = new Set([
+              "deployment_in_progress",
+              "syncing_files",
+              "finished_file_sync",
+              "updating_pages",
+              "purging_cdn",
+            ]);
+
+            let latestCommit = "";
+            try {
+              const latestBuild = await github.request("GET /repos/{owner}/{repo}/pages/builds/latest", { owner, repo });
+              latestCommit = latestBuild.data?.commit ?? "";
+            } catch (error) {
+              core.info(`No previous Pages build found (${error.status ?? "unknown"}).`);
+              return;
+            }
+
+            if (!latestCommit) {
+              core.info("No previous Pages build found.");
+              return;
+            }
+
+            const deployment = await github.request(
+              "GET /repos/{owner}/{repo}/pages/deployments/{pages_deployment_id}",
+              { owner, repo, pages_deployment_id: latestCommit }
+            );
+            const status = deployment.data?.status ?? "unknown";
+            if (!activeStatuses.has(status)) {
+              core.info(`No in-progress Pages deployment to cancel (status: ${status}).`);
+              return;
+            }
+
+            await github.request(
+              "POST /repos/{owner}/{repo}/pages/deployments/{pages_deployment_id}/cancel",
+              { owner, repo, pages_deployment_id: latestCommit }
+            );
+            core.info(`Cancelled in-progress Pages deployment ${latestCommit} (${status}).`);
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v5
