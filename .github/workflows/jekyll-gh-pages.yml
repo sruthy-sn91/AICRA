@@ -15,10 +15,10 @@ permissions:
   pages: write
   id-token: write
 
-# Allow only one concurrent deployment and cancel any in-progress run so the latest deploy can proceed.
+# Allow only one concurrent deployment and queue newer runs until the active deploy finishes.
 concurrency:
   group: "pages"
-  cancel-in-progress: true
+  cancel-in-progress: false
 
 jobs:
   # Build job
