@@ -58,35 +58,27 @@ jobs:
               "purging_cdn",
             ]);
 
-            let latestCommit = "";
-            try {
-              const latestBuild = await github.request("GET /repos/{owner}/{repo}/pages/builds/latest", { owner, repo });
-              latestCommit = latestBuild.data?.commit ?? "";
-            } catch (error) {
-              core.info(`No previous Pages build found (${error.status ?? "unknown"}).`);
-              return;
-            }
-
-            if (!latestCommit) {
-              core.info("No previous Pages build found.");
-              return;
-            }
-
-            const deployment = await github.request(
-              "GET /repos/{owner}/{repo}/pages/deployments/{pages_deployment_id}",
-              { owner, repo, pages_deployment_id: latestCommit }
+            const deployments = await github.paginate(
+              "GET /repos/{owner}/{repo}/pages/deployments",
+              { owner, repo, per_page: 100 }
             );
-            const status = deployment.data?.status ?? "unknown";
-            if (!activeStatuses.has(status)) {
-              core.info(`No in-progress Pages deployment to cancel (status: ${status}).`);
+            const activeDeployments = deployments.filter((deployment) =>
+              activeStatuses.has(deployment.status ?? "unknown")
+            );
+            if (activeDeployments.length === 0) {
+              core.info("No in-progress Pages deployment to cancel.");
               return;
             }
 
-            await github.request(
-              "POST /repos/{owner}/{repo}/pages/deployments/{pages_deployment_id}/cancel",
-              { owner, repo, pages_deployment_id: latestCommit }
-            );
-            core.info(`Cancelled in-progress Pages deployment ${latestCommit} (${status}).`);
+            for (const deployment of activeDeployments) {
+              await github.request(
+                "POST /repos/{owner}/{repo}/pages/deployments/{pages_deployment_id}/cancel",
+                { owner, repo, pages_deployment_id: deployment.id }
+              );
+              core.info(
+                `Cancelled in-progress Pages deployment ${deployment.id} (${deployment.status ?? "unknown"}).`
+              );
+            }
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v5
