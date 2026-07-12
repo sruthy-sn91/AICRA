@@ -58,10 +58,21 @@ jobs:
               "purging_cdn",
             ]);
 
-            const deployments = await github.paginate(
-              "GET /repos/{owner}/{repo}/pages/deployments",
-              { owner, repo, per_page: 100 }
-            );
+            let deployments = [];
+            try {
+              deployments = await github.paginate(
+                "GET /repos/{owner}/{repo}/pages/deployments",
+                { owner, repo, per_page: 100 }
+              );
+            } catch (error) {
+              if (error.status === 404) {
+                core.info(
+                  "Skipping stale deployment cancellation: Pages deployments endpoint is unavailable."
+                );
+                return;
+              }
+              throw error;
+            }
             const activeDeployments = deployments.filter((deployment) =>
               activeStatuses.has(deployment.status ?? "unknown")
             );
